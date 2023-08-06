@@ -1,6 +1,7 @@
 import * as React from 'react'
 
-import { FaEnvelopeOpenText } from '@react-icons/all-files/fa/FaEnvelopeOpenText'
+// import { FaEnvelopeOpenText } from '@react-icons/all-files/fa/FaEnvelopeOpenText'
+import { FaMedium } from '@react-icons/all-files/fa/FaMedium'
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub'
 import { FaLinkedin } from '@react-icons/all-files/fa/FaLinkedin'
 import { FaMastodon } from '@react-icons/all-files/fa/FaMastodon'
@@ -114,12 +115,12 @@ export const FooterImpl: React.FC = () => {
         {config.newsletter && (
           <a
             className={styles.newsletter}
-            href={`${config.newsletter}`}
-            title={`Newsletter ${config.author}`}
+            href={`https://www.medium.com/@${config.newsletter}`}
+            title={`Medium ${config.author}`}
             target='_blank'
             rel='noopener noreferrer'
           >
-            <FaEnvelopeOpenText />
+            <FaMedium />
           </a>
         )}
 
