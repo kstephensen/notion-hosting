@@ -60,7 +60,7 @@ const socialLinks: SocialLink[] = [
 
   config.newsletter && {
     name: 'medium',
-    href: `https://www.medum.com/@${config.newsletter}`,
+    href: `https://www.medium.com/@${config.newsletter}`,
     title: `Medium ${config.author}`,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
