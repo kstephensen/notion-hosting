@@ -47,13 +47,24 @@ const socialLinks: SocialLink[] = [
     )
   },
 
+  // config.newsletter && {
+  //   name: 'newsletter',
+  //   href: `${config.newsletter}`,
+  //   title: `Newsletter ${config.author}`,
+  //   icon: (
+  //     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+  //       <path d='M12 .64L8.23 3H5V5L2.97 6.29C2.39 6.64 2 7.27 2 8V18C2 19.11 2.9 20 4 20H20C21.11 20 22 19.11 22 18V8C22 7.27 21.61 6.64 21.03 6.29L19 5V3H15.77M7 5H17V9.88L12 13L7 9.88M8 6V7.5H16V6M5 7.38V8.63L4 8M19 7.38L20 8L19 8.63M8 8.5V10H16V8.5Z' />
+  //     </svg>
+  //   )
+  // },
+
   config.newsletter && {
-    name: 'newsletter',
-    href: `${config.newsletter}`,
-    title: `Newsletter ${config.author}`,
+    name: 'medium',
+    href: `https://www.medum.com/@${config.newsletter}`,
+    title: `Medium ${config.author}`,
     icon: (
-      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-        <path d='M12 .64L8.23 3H5V5L2.97 6.29C2.39 6.64 2 7.27 2 8V18C2 19.11 2.9 20 4 20H20C21.11 20 22 19.11 22 18V8C22 7.27 21.61 6.64 21.03 6.29L19 5V3H15.77M7 5H17V9.88L12 13L7 9.88M8 6V7.5H16V6M5 7.38V8.63L4 8M19 7.38L20 8L19 8.63M8 8.5V10H16V8.5Z' />
+      <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
+        <path d="M180.5,74.262C80.813,74.262,0,155.633,0,256S80.819,437.738,180.5,437.738,361,356.373,361,256,280.191,74.262,180.5,74.262Zm288.25,10.646c-49.845,0-90.245,76.619-90.245,171.095s40.406,171.1,90.251,171.1,90.251-76.619,90.251-171.1H559C559,161.5,518.6,84.908,468.752,84.908Zm139.506,17.821c-17.526,0-31.735,68.628-31.735,153.274s14.2,153.274,31.735,153.274S640,340.631,640,256C640,171.351,625.785,102.729,608.258,102.729Z"/>
       </svg>
     )
   },
