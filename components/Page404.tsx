@@ -7,15 +7,14 @@ export function Page404({ pageId, error }: types.PageProps) {
     <>
       <div className={styles.container}>
         <main className={styles.main}>
-          <h1>Notion Page Not Found</h1>
+          <h1>Page not found</h1>
 
           {error ? (
             <p>{error.message}</p>
           ) : (
             pageId && (
               <p>
-                Make sure that Notion page &quot;{pageId}&quot; is publicly
-                accessible.
+                This page isn&apos;t available or the link may be incorrect.
               </p>
             )
           )}

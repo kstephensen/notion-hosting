@@ -11,7 +11,7 @@ export async function pageAcl({
     return {
       error: {
         statusCode: 404,
-        message: 'Unable to resolve notion site'
+        message: 'Unable to load site'
       }
     }
   }
@@ -20,7 +20,7 @@ export async function pageAcl({
     return {
       error: {
         statusCode: 404,
-        message: `Unable to resolve page for domain "${site.domain}". Notion page "${pageId}" not found.`
+        message: `Page "${pageId}" was not found for ${site.domain}.`
       }
     }
   }
@@ -32,7 +32,7 @@ export async function pageAcl({
     return {
       error: {
         statusCode: 404,
-        message: `Unable to resolve page for domain "${site.domain}". Notion page "${pageId}" invalid data.`
+        message: `Page "${pageId}" could not be loaded for ${site.domain}.`
       }
     }
   }
@@ -49,7 +49,7 @@ export async function pageAcl({
       return {
         error: {
           statusCode: 404,
-          message: `Notion page "${pageId}" doesn't belong to the Notion workspace owned by "${site.domain}".`
+          message: `Page "${pageId}" is not available on this site.`
         }
       }
     }

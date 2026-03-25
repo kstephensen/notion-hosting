@@ -22,8 +22,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
     other: [{ rel: 'icon', url: '/favicon.png', sizes: '32x32' }]
-  },
-  manifest: '/manifest.json'
+  }
 }
 
 export const viewport: Viewport = {

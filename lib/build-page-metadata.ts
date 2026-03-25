@@ -17,7 +17,7 @@ export function buildPageMetadata(props: PageProps): Metadata {
 
   if (error || !site || !recordMap || !pageId) {
     return {
-      title: site?.name || 'Notion Page Not Found',
+      title: site?.name || 'Page not found',
       robots: { index: false, follow: false }
     }
   }

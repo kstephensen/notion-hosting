@@ -1,10 +1,9 @@
 {
-  "name": "nextjs-notion-starter-kit",
+  "name": "notion-hosting",
   "version": "2.0.0",
   "private": true,
-  "description": "The perfect starter kit for building beautiful websites with Next.js and Notion.",
-  "author": "Travis Fischer <travis@transitivebullsh.it>",
-  "repository": "transitive-bullshit/nextjs-notion-starter-kit",
+  "description": "Personal website",
+  "author": "Kasen Stephensen",
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
   "engines": {
