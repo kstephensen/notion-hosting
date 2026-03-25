@@ -1,7 +1,7 @@
 import type * as types from 'notion-types'
 import cs from 'classnames'
 import * as React from 'react'
-import { Breadcrumbs, Header, Search, useNotionContext } from 'react-notion-x'
+import { Breadcrumbs, Search, useNotionContext } from 'react-notion-x'
 
 import { isSearchEnabled, navigationLinks, navigationStyle } from '@/lib/config'
 import { MoonIcon } from '@/lib/icons/moon'
@@ -18,16 +18,21 @@ function ToggleThemeButton() {
     setHasMounted(true)
   }, [])
 
-  const onToggleTheme = React.useCallback(() => {
-    toggleDarkMode()
-  }, [toggleDarkMode])
-
   return (
-    <div
-      className={cs('breadcrumb', 'button', !hasMounted && styles.hidden)}
-      onClick={onToggleTheme}
-    >
-      {hasMounted && isDarkMode ? <MoonIcon /> : <SunIcon />}
+    <div className={styles.themeToggle}>
+      <button
+        type='button'
+        className={cs(
+          styles.themeToggleBtn,
+          !hasMounted && styles.themeToggleHidden
+        )}
+        onClick={toggleDarkMode}
+        title='Toggle color theme'
+        aria-label='Toggle color theme'
+        disabled={!hasMounted}
+      >
+        {hasMounted && (isDarkMode ? <MoonIcon /> : <SunIcon />)}
+      </button>
     </div>
   )
 }
@@ -39,33 +44,39 @@ export function NotionPageHeader({
 }) {
   const { components, mapPageUrl } = useNotionContext()
 
-  if (navigationStyle === 'default') {
-    return <Header block={block} />
-  }
+  const breadcrumbs =
+    navigationStyle === 'custom' ? (
+      <Breadcrumbs block={block} rootOnly={true} />
+    ) : (
+      <Breadcrumbs block={block} />
+    )
 
   return (
     <header className='notion-header'>
       <div className='notion-nav-header'>
-        <Breadcrumbs block={block} rootOnly={true} />
+        {breadcrumbs}
 
-        <div className='notion-nav-header-rhs breadcrumbs'>
-          {navigationLinks
-            ?.map((link, index) => {
-              if (!link?.pageId && !link?.url) {
-                return null
-              }
+        <div
+          className={cs('notion-nav-header-rhs', 'breadcrumbs', styles.headerRhs)}
+        >
+          {navigationStyle === 'custom' &&
+            navigationLinks
+              ?.map((link, index) => {
+                if (!link?.pageId && !link?.url) {
+                  return null
+                }
 
-              if (link.pageId) {
-                return (
-                  <components.PageLink
-                    href={mapPageUrl(link.pageId)}
-                    key={index}
-                    className={cs(styles.navLink, 'breadcrumb', 'button')}
-                  >
-                    {link.title}
-                  </components.PageLink>
-                )
-              } else {
+                if (link.pageId) {
+                  return (
+                    <components.PageLink
+                      href={mapPageUrl(link.pageId)}
+                      key={index}
+                      className={cs(styles.navLink, 'breadcrumb', 'button')}
+                    >
+                      {link.title}
+                    </components.PageLink>
+                  )
+                }
                 return (
                   <components.Link
                     href={link.url}
@@ -75,9 +86,8 @@ export function NotionPageHeader({
                     {link.title}
                   </components.Link>
                 )
-              }
-            })
-            .filter(Boolean)}
+              })
+              .filter(Boolean)}
 
           <ToggleThemeButton />
 
