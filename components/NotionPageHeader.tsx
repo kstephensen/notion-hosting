@@ -1,5 +1,8 @@
+'use client'
+
 import type * as types from 'notion-types'
 import { clsx } from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { Search, useNotionContext } from 'react-notion-x'
 
@@ -45,13 +48,53 @@ export function NotionPageHeader({
   block: types.CollectionViewPageBlock | types.PageBlock
 }) {
   const { components, mapPageUrl } = useNotionContext()
+  const [shipHovered, setShipHovered] = React.useState(false)
+  const [shipItCount, setShipItCount] = React.useState(8)
+  const spanRef = React.useRef<HTMLSpanElement>(null)
+
+  React.useLayoutEffect(() => {
+    if (!shipHovered || !spanRef.current) return
+    const container = spanRef.current
+    const cs = window.getComputedStyle(container)
+    const measurer = document.createElement('span')
+    measurer.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font-weight:${cs.fontWeight};font-style:${cs.fontStyle};letter-spacing:${cs.letterSpacing};font-family:${cs.fontFamily};font-size:${cs.fontSize}`
+    measurer.textContent = 'SHIP IT  '
+    document.body.appendChild(measurer)
+    const unitWidth = measurer.offsetWidth
+    document.body.removeChild(measurer)
+    if (unitWidth > 0) {
+      setShipItCount(Math.max(1, Math.floor(container.offsetWidth / unitWidth)))
+    }
+  }, [shipHovered])
 
   return (
     <header className='notion-header'>
       <div className='notion-nav-header'>
-        <components.PageLink href='/' className='breadcrumb button'>
+        <components.PageLink
+          href='/'
+          className='breadcrumb button'
+          onMouseEnter={() => setShipHovered(true)}
+          onMouseLeave={() => setShipHovered(false)}
+        >
           <SailingShip />
         </components.PageLink>
+
+        <AnimatePresence>
+          {shipHovered && (
+            <motion.span
+              ref={spanRef}
+              key='ship-it'
+              initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+              animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0 } }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className='flex-1 overflow-hidden whitespace-nowrap font-bold italic tracking-widest text-base select-none pointer-events-none px-4'
+              style={{ fontFamily: 'monospace' }}
+            >
+              {Array(shipItCount).fill('SHIP IT').join('  ')}
+            </motion.span>
+          )}
+        </AnimatePresence>
 
         <div className={clsx('notion-nav-header-rhs', 'breadcrumbs', 'flex flex-row items-center justify-end gap-0.5 shrink-0 ml-auto')}>
           {navigationStyle === 'custom' &&
