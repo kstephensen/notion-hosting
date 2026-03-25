@@ -17,7 +17,8 @@ import { mapImageUrl } from '@/lib/map-image-url'
 import { notion } from '@/lib/notion-api'
 import { type NotionPageInfo, type PageError } from '@/lib/types'
 
-export const runtime = 'edge'
+// Node.js runtime: Edge bundle exceeded Vercel's 1 MB limit (large Inter font + notion-client).
+export const runtime = 'nodejs'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -176,7 +177,7 @@ export async function getNotionPageInfo({
       type: 'error',
       error: {
         statusCode: 400,
-        message: `Notion page "${pageId}" belongs to a different workspace.`
+        message: `Page "${pageId}" is not available for this site.`
       }
     }
   }
