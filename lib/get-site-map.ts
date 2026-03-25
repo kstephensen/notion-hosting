@@ -2,7 +2,6 @@ import {
   getAllPagesInSpace,
   getBlockValue,
   getPageProperty,
-  uuidToId
 } from 'notion-utils'
 import pMemoize from 'p-memoize'
 
@@ -31,7 +30,6 @@ const getAllPages = pMemoize(getAllPagesImpl, {
 })
 
 const getPage = async (pageId: string, opts?: any) => {
-  console.log('\nnotion getPage', uuidToId(pageId))
   return notion.getPage(pageId, {
     kyOptions: {
       timeout: 30_000
