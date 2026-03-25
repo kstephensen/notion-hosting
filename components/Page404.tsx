@@ -1,15 +1,10 @@
 import type * as types from '@/lib/types'
 
-import { PageHead } from './PageHead'
 import styles from './styles.module.css'
 
-export function Page404({ site, pageId, error }: types.PageProps) {
-  const title = site?.name || 'Notion Page Not Found'
-
+export function Page404({ pageId, error }: types.PageProps) {
   return (
     <>
-      <PageHead site={site} title={title} />
-
       <div className={styles.container}>
         <main className={styles.main}>
           <h1>Notion Page Not Found</h1>

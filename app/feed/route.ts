@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next'
+import { NextResponse } from 'next/server'
 import { type ExtendedRecordMap } from 'notion-types'
 import {
   getBlockParentPage,
@@ -14,17 +14,9 @@ import { getSiteMap } from '@/lib/get-site-map'
 import { getSocialImageUrl } from '@/lib/get-social-image-url'
 import { getCanonicalPageUrl } from '@/lib/map-page-url'
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  if (req.method !== 'GET') {
-    res.statusCode = 405
-    res.setHeader('Content-Type', 'application/json')
-    res.write(JSON.stringify({ error: 'method not allowed' }))
-    res.end()
-    return { props: {} }
-  }
-
+export async function GET() {
   const siteMap = await getSiteMap()
-  const ttlMinutes = 24 * 60 // 24 hours
+  const ttlMinutes = 24 * 60
   const ttlSeconds = ttlMinutes * 60
 
   const feed = new RSS({
@@ -87,17 +79,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const feedText = feed.xml({ indent: true })
 
-  res.setHeader(
-    'Cache-Control',
-    `public, max-age=${ttlSeconds}, stale-while-revalidate=${ttlSeconds}`
-  )
-  res.setHeader('Content-Type', 'text/xml; charset=utf-8')
-  res.write(feedText)
-  res.end()
-
-  return { props: {} }
-}
-
-export default function noop() {
-  return null
+  return new NextResponse(feedText, {
+    headers: {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'Cache-Control': `public, max-age=${ttlSeconds}, stale-while-revalidate=${ttlSeconds}`
+    }
+  })
 }
