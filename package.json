@@ -80,5 +80,16 @@
       "prettier --ignore-unknown --write",
       "eslint --fix"
     ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp", "simple-git-hooks"],
+    "minimumReleaseAge": 1440,
+    "minimumReleaseAgeExclude": [
+      "@fisch0920/config",
+      "react-notion-x",
+      "notion-client",
+      "notion-types",
+      "notion-utils"
+    ]
   }
 }
