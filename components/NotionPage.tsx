@@ -4,7 +4,6 @@ import { clsx as cs } from 'clsx'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { type PageBlock } from 'notion-types'
 import {
   formatDate,
@@ -13,7 +12,6 @@ import {
   getPageProperty
 } from 'notion-utils'
 import * as React from 'react'
-import BodyClassName from 'react-body-classname'
 import {
   type NotionComponents,
   NotionRenderer,
@@ -137,21 +135,11 @@ export function NotionPage({
   error,
   pageId
 }: types.PageProps) {
-  const searchParams = useSearchParams()
-  const lite = searchParams.get('lite')
-
-  // lite mode is for oembed
-  const isLiteMode = lite === 'true'
-
   const { isDarkMode } = useDarkMode()
 
   const siteMapPageUrl = React.useMemo(() => {
-    const params: any = {}
-    if (lite) params.lite = lite
-
-    const searchParams = new URLSearchParams(params)
-    return site ? mapPageUrl(site, recordMap!, searchParams) : undefined
-  }, [site, recordMap, lite])
+    return site ? mapPageUrl(site, recordMap!, new URLSearchParams()) : undefined
+  }, [site, recordMap])
 
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
@@ -233,8 +221,6 @@ export function NotionPage({
         />
       )}
 
-      {isLiteMode && <BodyClassName className='notion-lite' />}
-
       <NotionRenderer
         bodyClassName={cs(
           'notion',
@@ -245,7 +231,7 @@ export function NotionPage({
         recordMap={recordMap}
         rootPageId={site.rootNotionPageId}
         rootDomain={site.domain}
-        fullPage={!isLiteMode}
+        fullPage={true}
         previewImages={!!recordMap.preview_images}
         showCollectionViewDropdown={false}
         showTableOfContents={showTableOfContents}
