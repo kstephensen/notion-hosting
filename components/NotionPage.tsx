@@ -30,7 +30,6 @@ import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { Footer } from './Footer'
-// import { GitHubShareButton } from './GitHubShareButton'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
@@ -231,7 +230,7 @@ export function NotionPage({
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
 
-  const showTableOfContents = !!isBlogPost
+  const showTableOfContents = false
   const minTableOfContentsItems = 3
 
   const pageAside = React.useMemo(
@@ -240,9 +239,10 @@ export function NotionPage({
         block={block!}
         recordMap={recordMap!}
         isBlogPost={isBlogPost}
+        minTableOfContentsItems={minTableOfContentsItems}
       />
     ),
-    [block, recordMap, isBlogPost]
+    [block, recordMap, isBlogPost, minTableOfContentsItems]
   )
 
   if (error || !site || !block || !recordMap) {
