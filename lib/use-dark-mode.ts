@@ -1,10 +1,17 @@
-import useDarkModeImpl from '@fisch0920/use-dark-mode'
+import { useTheme } from 'next-themes'
+import * as React from 'react'
 
 export function useDarkMode() {
-  const darkMode = useDarkModeImpl(false, { classNameDark: 'dark-mode' })
+  const { resolvedTheme, setTheme } = useTheme()
+
+  const isDarkMode = resolvedTheme === 'dark'
+
+  const toggleDarkMode = React.useCallback(() => {
+    setTheme(isDarkMode ? 'light' : 'dark')
+  }, [isDarkMode, setTheme])
 
   return {
-    isDarkMode: darkMode.value,
-    toggleDarkMode: darkMode.toggle
+    isDarkMode,
+    toggleDarkMode
   }
 }
