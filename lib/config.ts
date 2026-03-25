@@ -115,18 +115,26 @@ export const isSearchEnabled: boolean = getSiteConfig('isSearchEnabled', true)
 export const isRedisEnabled: boolean =
   getSiteConfig('isRedisEnabled', false) || !!getEnv('REDIS_ENABLED', null)
 
-// (if you want to enable redis, only REDIS_HOST and REDIS_PASSWORD are required)
+// Prefer `REDIS_URL` (e.g. Vercel native Redis).
+// Fall back to `REDIS_HOST` / `REDIS_PASSWORD` if `REDIS_URL` isn't provided.
+const redisUrlFromEnv = getEnv('REDIS_URL', null)
+
 // we recommend that you store these in a local `.env` file
-export const redisHost = getEnv('REDIS_HOST', isRedisEnabled ? undefined : null)
-export const redisPassword = getEnv(
-  'REDIS_PASSWORD',
-  isRedisEnabled ? undefined : null
-)
+export const redisHost = redisUrlFromEnv
+  ? (null as unknown as string)
+  : getEnv('REDIS_HOST', isRedisEnabled ? undefined : null)
+
+export const redisPassword = redisUrlFromEnv
+  ? (null as unknown as string)
+  : getEnv('REDIS_PASSWORD', isRedisEnabled ? undefined : null)
+
 export const redisUser: string = getEnv('REDIS_USER', 'default')
-export const redisUrl = getEnv(
-  'REDIS_URL',
-  isRedisEnabled ? `redis://${redisUser}:${redisPassword}@${redisHost}` : null
-)
+
+export const redisUrl = redisUrlFromEnv
+  ? redisUrlFromEnv
+  : isRedisEnabled
+    ? `redis://${redisUser}:${redisPassword}@${redisHost}`
+    : null
 export const redisNamespace = getEnv('REDIS_NAMESPACE', 'preview-images')
 
 // ----------------------------------------------------------------------------

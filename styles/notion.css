@@ -36,6 +36,13 @@
 .notion-asset-wrapper {
   margin-top: 1em;
   margin-bottom: 1em;
+  /* Next/Image `fill` requires the containing element to be positioned. */
+  position: relative;
+}
+
+/* Some notion assets use the "-full" wrapper variant. */
+.notion-asset-wrapper-full {
+  position: relative;
 }
 
 .notion-asset-wrapper-video > div,
@@ -209,6 +216,9 @@
 
 .notion-page-cover-wrapper {
   box-shadow: 2px 2px 8px 4px rgba(15, 15, 15, 0.1);
+  /* Required for Next.js <Image fill> positioning when react-notion-x
+     forces custom images without width/height. */
+  position: relative;
 }
 
 @media only screen and (max-width: 1200px) {

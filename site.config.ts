@@ -33,9 +33,11 @@ export default siteConfig({
   isPreviewImageSupportEnabled: true,
 
   // whether or not redis is enabled for caching generated preview images (optional)
-  // NOTE: if you enable redis, you need to set the `REDIS_HOST` and `REDIS_PASSWORD`
-  // environment variables. see the readme for more info
-  isRedisEnabled: false,
+  // NOTE: if you enable redis, set either `REDIS_URL` (e.g. Vercel Redis) or
+  // `REDIS_HOST` + `REDIS_PASSWORD`. see the readme for more info
+  // Only enable Redis caching on Vercel. This prevents local dev from
+  // spamming connection retries when Vercel Redis isn't reachable.
+  isRedisEnabled: !!process.env.VERCEL,
 
   isSearchEnabled: false,
 
