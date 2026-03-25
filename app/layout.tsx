@@ -1,9 +1,6 @@
-import 'katex/dist/katex.min.css'
-import 'prismjs/themes/prism-coy.css'
 import 'react-notion-x/styles.css'
 import '@/styles/global.css'
 import '@/styles/notion.css'
-import '@/styles/prism-theme.css'
 
 import type { Metadata, Viewport } from 'next'
 import { PT_Serif } from 'next/font/google'

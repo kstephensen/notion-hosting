@@ -2,7 +2,6 @@
 
 import { type TableOfContentsEntry, uuidToId } from 'notion-utils'
 import { clsx } from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 
@@ -83,44 +82,38 @@ export function PageTableOfContents({
       onMouseLeave={scheduleClose}
     >
       {mounted && createPortal(
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              className='toc-popover fixed z-[10000] right-5 top-1/2 -translate-y-1/2 min-w-[200px] max-w-[min(300px,calc(100vw-24px))] max-h-[80vh] py-[0.45rem] rounded-lg overflow-y-auto overflow-x-hidden text-(--fg-color) bg-(--bg-color) shadow-[0_0_0_1px_var(--fg-color-0,rgba(55,53,47,0.08)),0_6px_24px_rgba(15,15,15,0.12)]'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ x: 60, opacity: 0 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
-              onMouseEnter={cancelClose}
-              onMouseLeave={scheduleClose}
-            >
-              <ul className='list-none m-0 p-0 flex flex-col gap-[0.1rem]'>
-                {entries.map((item) => {
-                  const id = uuidToId(item.id)
-                  const isActive = activeId === id
-                  return (
-                    <li
-                      key={item.id}
-                      className='m-0 w-full text-right leading-[1.4]'
-                      style={{ paddingRight: item.indentLevel * indentPx }}
+        open ? (
+          <div
+            className='toc-popover toc-popover-animate fixed z-[10000] right-5 top-1/2 -translate-y-1/2 min-w-[200px] max-w-[min(300px,calc(100vw-24px))] max-h-[80vh] py-[0.45rem] rounded-lg overflow-y-auto overflow-x-hidden text-(--fg-color) bg-(--bg-color) shadow-[0_0_0_1px_var(--fg-color-0,rgba(55,53,47,0.08)),0_6px_24px_rgba(15,15,15,0.12)]'
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <ul className='list-none m-0 p-0 flex flex-col gap-[0.1rem]'>
+              {entries.map((item) => {
+                const id = uuidToId(item.id)
+                const isActive = activeId === id
+                return (
+                  <li
+                    key={item.id}
+                    className='m-0 w-full text-right leading-[1.4]'
+                    style={{ paddingRight: item.indentLevel * indentPx }}
+                  >
+                    <a
+                      className={clsx(
+                        'block w-full px-4 py-[0.28rem] text-[0.8125rem] font-normal text-(--fg-color) opacity-[0.52] no-underline transition-opacity duration-150 hyphens-auto [overflow-wrap:anywhere] hover:opacity-[0.88]',
+                        isActive && 'toc-popover-link-active opacity-100 font-medium'
+                      )}
+                      href={`#${id}`}
+                      tabIndex={-1}
                     >
-                      <a
-                        className={clsx(
-                          'block w-full px-4 py-[0.28rem] text-[0.8125rem] font-normal text-(--fg-color) opacity-[0.52] no-underline transition-opacity duration-150 hyphens-auto [overflow-wrap:anywhere] hover:opacity-[0.88]',
-                          isActive && 'toc-popover-link-active opacity-100 font-medium'
-                        )}
-                        href={`#${id}`}
-                        tabIndex={-1}
-                      >
-                        {item.text}
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>,
+                      {item.text}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ) : null,
         document.body
       )}
 

@@ -2,7 +2,6 @@
 
 import type * as types from 'notion-types'
 import { clsx } from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { Search, useNotionContext } from 'react-notion-x'
 
@@ -79,22 +78,15 @@ export function NotionPageHeader({
           <SailingShip />
         </components.PageLink>
 
-        <AnimatePresence>
-          {shipHovered && (
-            <motion.span
-              ref={spanRef}
-              key='ship-it'
-              initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-              animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0 } }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className='flex-1 overflow-hidden whitespace-nowrap font-bold italic tracking-widest text-base select-none pointer-events-none px-4'
-              style={{ fontFamily: 'monospace' }}
-            >
-              {Array(shipItCount).fill('SHIP IT').join('  ')}
-            </motion.span>
-          )}
-        </AnimatePresence>
+        {shipHovered && (
+          <span
+            ref={spanRef}
+            className='ship-text-enter flex-1 overflow-hidden whitespace-nowrap font-bold italic tracking-widest text-base select-none pointer-events-none px-4'
+            style={{ fontFamily: 'monospace' }}
+          >
+            {Array(shipItCount).fill('SHIP IT').join('  ')}
+          </span>
+        )}
 
         <div className={clsx('notion-nav-header-rhs', 'breadcrumbs', 'flex flex-row items-center justify-end gap-0.5 shrink-0 ml-auto')}>
           {navigationStyle === 'custom' &&

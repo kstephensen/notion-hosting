@@ -6,7 +6,7 @@ import { buildPageMetadata } from '@/lib/build-page-metadata'
 import { domain } from '@/lib/config'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 
-export const revalidate = 10
+export const revalidate = 3600
 
 const loadHomePage = cache(async () => resolveNotionPage(domain))
 
