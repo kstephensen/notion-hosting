@@ -13,6 +13,10 @@
   }
 }
 
+:root {
+  --notion-font: var(--font-pt-serif), serif;
+}
+
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
