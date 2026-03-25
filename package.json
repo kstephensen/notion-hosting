@@ -30,7 +30,8 @@
   "dependencies": {
     "@keyvhq/core": "^2.1.15",
     "@keyvhq/redis": "^2.1.17",
-    "classnames": "^2.5.1",
+    "@tailwindcss/postcss": "^4.2.2",
+    "clsx": "^2.1.1",
     "expiry-map": "^2.0.0",
     "fathom-client": "^3.7.2",
     "katex": "^0.16.42",
@@ -52,7 +53,8 @@
     "react-notion-x": "^7.10.0",
     "react-tweet": "^3.3.0",
     "react-use": "^17.6.0",
-    "rss": "^1.2.2"
+    "rss": "^1.2.2",
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
     "@fisch0920/config": "^1.4.0",

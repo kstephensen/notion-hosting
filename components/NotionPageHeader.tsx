@@ -1,5 +1,5 @@
 import type * as types from 'notion-types'
-import cs from 'classnames'
+import { clsx } from 'clsx'
 import * as React from 'react'
 import { Breadcrumbs, Search, useNotionContext } from 'react-notion-x'
 
@@ -7,8 +7,6 @@ import { isSearchEnabled, navigationLinks, navigationStyle } from '@/lib/config'
 import { MoonIcon } from '@/lib/icons/moon'
 import { SunIcon } from '@/lib/icons/sun'
 import { useDarkMode } from '@/lib/use-dark-mode'
-
-import styles from './styles.module.css'
 
 function ToggleThemeButton() {
   const [hasMounted, setHasMounted] = React.useState(false)
@@ -19,12 +17,15 @@ function ToggleThemeButton() {
   }, [])
 
   return (
-    <div className={styles.themeToggle}>
+    <div className='flex items-center leading-none'>
       <button
         type='button'
-        className={cs(
-          styles.themeToggleBtn,
-          !hasMounted && styles.themeToggleHidden
+        className={clsx(
+          'inline-flex items-center justify-center p-1.25 border-none rounded-md bg-transparent text-(--fg-color) opacity-50 cursor-pointer transition-[opacity,background] duration-120 ease-in',
+          'hover:enabled:opacity-95 hover:enabled:bg-(--bg-color-0)',
+          'disabled:cursor-default',
+          'focus-visible:outline-2 focus-visible:outline-(--select-color-0) focus-visible:outline-offset-2 focus-visible:opacity-95',
+          !hasMounted && 'opacity-0 pointer-events-none'
         )}
         onClick={toggleDarkMode}
         title='Toggle color theme'
@@ -56,9 +57,7 @@ export function NotionPageHeader({
       <div className='notion-nav-header'>
         {breadcrumbs}
 
-        <div
-          className={cs('notion-nav-header-rhs', 'breadcrumbs', styles.headerRhs)}
-        >
+        <div className={clsx('notion-nav-header-rhs', 'breadcrumbs', 'flex flex-row items-center justify-end gap-0.5 shrink-0 ml-auto')}>
           {navigationStyle === 'custom' &&
             navigationLinks
               ?.map((link, index) => {
@@ -71,7 +70,7 @@ export function NotionPageHeader({
                     <components.PageLink
                       href={mapPageUrl(link.pageId)}
                       key={index}
-                      className={cs(styles.navLink, 'breadcrumb', 'button')}
+                      className='breadcrumb button'
                     >
                       {link.title}
                     </components.PageLink>
@@ -81,7 +80,7 @@ export function NotionPageHeader({
                   <components.Link
                     href={link.url}
                     key={index}
-                    className={cs(styles.navLink, 'breadcrumb', 'button')}
+                    className='breadcrumb button'
                   >
                     {link.title}
                   </components.Link>

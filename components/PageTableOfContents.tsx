@@ -1,10 +1,9 @@
 'use client'
 
 import { type TableOfContentsEntry, uuidToId } from 'notion-utils'
+import { clsx } from 'clsx'
 import * as React from 'react'
 import { createPortal } from 'react-dom'
-
-import styles from './PageTableOfContents.module.css'
 
 const SCROLL_SPY_THROTTLE_MS = 100
 /** Time to cross the gap between the dash rail and the portaled popover */
@@ -33,7 +32,7 @@ function throttle<T extends (...args: unknown[]) => void>(fn: T, wait: number) {
   }
 }
 
-/** Dash width (px): shallower headings get a longer mark, like Notion’s outline */
+/** Dash width (px): shallower headings get a longer mark, like Notion's outline */
 function dashWidthPx(indentLevel: number) {
   return Math.max(8, 20 - indentLevel * 2)
 }
@@ -59,7 +58,7 @@ function layoutPopover(el: HTMLElement): PopoverLayout {
   const r = el.getBoundingClientRect()
   return {
     top: Math.max(8, r.top),
-    /* Align popover’s right edge to the nav’s *right* edge (where the dashes sit), not r.left */
+    /* Align popover's right edge to the nav's *right* edge (where the dashes sit), not r.left */
     right: window.innerWidth - r.right,
     maxHeight: Math.min(window.innerHeight * 0.88, window.innerHeight - Math.max(8, r.top) - 12)
   }
@@ -67,7 +66,7 @@ function layoutPopover(el: HTMLElement): PopoverLayout {
 
 /**
  * Outline rail (dashes + scrollspy). Hovering anywhere on the rail opens one
- * global popover with the full heading list — same pattern as Notion’s page outline.
+ * global popover with the full heading list — same pattern as Notion's page outline.
  */
 export function PageTableOfContents({
   entries,
@@ -195,7 +194,7 @@ export function PageTableOfContents({
     mounted && popoverOpen && popoverLayout
       ? createPortal(
           <div
-            className={styles.popover}
+            className='toc-popover fixed z-[10000] min-w-[200px] max-w-[min(300px,calc(100vw-24px))] py-[0.45rem] rounded-lg overflow-y-auto overflow-x-hidden text-(--fg-color) bg-(--bg-color) shadow-[0_0_0_1px_var(--fg-color-0,rgba(55,53,47,0.08)),0_6px_24px_rgba(15,15,15,0.12)]'
             style={{
               top: popoverLayout.top,
               right: popoverLayout.right,
@@ -204,23 +203,22 @@ export function PageTableOfContents({
             onMouseEnter={clearHideTimer}
             onMouseLeave={scheduleClosePopover}
           >
-            <ul className={styles.popoverList}>
+            <ul className='list-none m-0 p-0 flex flex-col gap-[0.1rem]'>
               {entries.map((item) => {
                 const id = uuidToId(item.id)
                 const isActive = activeId === id
                 return (
                   <li
                     key={item.id}
-                    className={styles.popoverItem}
+                    className='m-0 w-full text-right leading-[1.4]'
                     style={{ paddingRight: item.indentLevel * indentPx }}
                   >
                     <a
-                      className={[
-                        styles.popoverLink,
-                        isActive && styles.popoverLinkActive
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
+                      className={clsx(
+                        'block w-full px-[0.65rem] py-[0.28rem] text-[0.8125rem] font-normal text-(--fg-color) opacity-[0.52] no-underline transition-opacity duration-150 ease-linear hyphens-auto [overflow-wrap:anywhere]',
+                        'hover:opacity-[0.88]',
+                        isActive && 'toc-popover-link-active opacity-100 font-medium'
+                      )}
                       href={`#${id}`}
                       tabIndex={-1}
                     >
@@ -238,33 +236,39 @@ export function PageTableOfContents({
   return (
     <nav
       ref={rootRef}
-      className={[styles.root, className].filter(Boolean).join(' ')}
+      className={clsx(
+        'toc-root min-w-[222px] max-w-[min(280px,100%)] max-h-[calc(100vh-164px)] overflow-y-auto overflow-x-hidden mb-5 pl-1',
+        className
+      )}
       aria-label={title}
       onMouseEnter={openPopover}
       onMouseLeave={scheduleClosePopover}
     >
       {popoverPortal}
-      <ul className={styles.list}>
+      <ul className='list-none m-0 p-0 flex flex-col items-end gap-[0.2rem]'>
         {entries.map((item) => {
           const id = uuidToId(item.id)
           const isActive = activeId === id
           return (
             <li
               key={item.id}
-              className={styles.item}
+              className='m-0 w-full flex justify-end leading-[1.2]'
               style={{ paddingRight: item.indentLevel * indentPx }}
             >
               <a
                 data-toc-text={item.text}
-                className={[styles.link, isActive && styles.linkActive]
-                  .filter(Boolean)
-                  .join(' ')}
+                className={clsx(
+                  'toc-link relative inline-flex items-center justify-end min-h-[1.35rem] min-w-[1.75rem] py-[0.2rem] text-(--fg-color) opacity-[0.48] no-underline transition-opacity duration-200 ease-linear outline-none',
+                  'hover:opacity-[0.78]',
+                  'focus-visible:opacity-100 focus-visible:rounded focus-visible:shadow-[0_0_0_2px_var(--fg-color-0,rgba(55,53,47,0.2))]',
+                  isActive && 'toc-link-active opacity-100'
+                )}
                 href={`#${id}`}
                 aria-label={item.text}
                 aria-current={isActive ? 'location' : undefined}
               >
                 <span
-                  className={styles.dash}
+                  className='block h-[2px] shrink-0 rounded-[1px] bg-current'
                   style={{ width: dashWidthPx(item.indentLevel) }}
                   aria-hidden="true"
                 />

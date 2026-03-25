@@ -1,6 +1,6 @@
 'use client'
 
-import cs from 'classnames'
+import { clsx as cs } from 'clsx'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -33,8 +33,6 @@ import { Footer } from './Footer'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
-import styles from './styles.module.css'
-
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
 // -----------------------------------------------------------------------------
@@ -306,7 +304,7 @@ export function NotionPage({
 
       <NotionRenderer
         bodyClassName={cs(
-          styles.notion,
+          'notion',
           pageId === site.rootNotionPageId && 'index-page'
         )}
         darkMode={isDarkMode}
