@@ -1,12 +1,13 @@
 import type * as types from 'notion-types'
 import { clsx } from 'clsx'
 import * as React from 'react'
-import { Breadcrumbs, Search, useNotionContext } from 'react-notion-x'
+import { Search, useNotionContext } from 'react-notion-x'
 
 import { isSearchEnabled, navigationLinks, navigationStyle } from '@/lib/config'
 import { MoonIcon } from '@/lib/icons/moon'
 import { SunIcon } from '@/lib/icons/sun'
 import { useDarkMode } from '@/lib/use-dark-mode'
+import { SailingShip } from '@/components/SailingShip'
 
 function ToggleThemeButton() {
   const [hasMounted, setHasMounted] = React.useState(false)
@@ -45,17 +46,12 @@ export function NotionPageHeader({
 }) {
   const { components, mapPageUrl } = useNotionContext()
 
-  const breadcrumbs =
-    navigationStyle === 'custom' ? (
-      <Breadcrumbs block={block} rootOnly={true} />
-    ) : (
-      <Breadcrumbs block={block} />
-    )
-
   return (
     <header className='notion-header'>
       <div className='notion-nav-header'>
-        {breadcrumbs}
+        <components.PageLink href='/' className='breadcrumb button'>
+          <SailingShip />
+        </components.PageLink>
 
         <div className={clsx('notion-nav-header-rhs', 'breadcrumbs', 'flex flex-row items-center justify-end gap-0.5 shrink-0 ml-auto')}>
           {navigationStyle === 'custom' &&

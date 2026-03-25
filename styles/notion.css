@@ -47,6 +47,7 @@
   max-width: 1100px;
   margin: 0 auto;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .notion-nav-header-rhs {
@@ -102,7 +103,15 @@
 }
 
 .notion-collection-card:hover .notion-collection-card-cover {
-  filter: brightness(120%);
+  filter: none;
+}
+
+.notion-collection-card:hover {
+  background: transparent !important;
+}
+
+.notion-collection-card:hover .notion-page-title-text {
+  text-decoration: underline;
 }
 
 .notion-collection-card-body {
@@ -347,6 +356,10 @@
   background: none !important;
 }
 
+
+.notion-nav-header > .breadcrumb.button:hover {
+  background: transparent !important;
+}
 
 .notion-header {
   background: hsla(0, 0%, 100%, 0.8);
