@@ -52,7 +52,7 @@ export const isDev = environment === 'development'
 export const name: string = getRequiredSiteConfig('name')
 export const author: string = getRequiredSiteConfig('author')
 export const domain: string = getRequiredSiteConfig('domain')
-export const description: string = getSiteConfig('description', 'Notion Blog')
+export const description: string = getSiteConfig('description', '')
 export const language: string = getSiteConfig('language', 'en')
 
 // social accounts

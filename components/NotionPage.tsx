@@ -1,8 +1,10 @@
+'use client'
+
 import cs from 'classnames'
 import dynamic from 'next/dynamic'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 import { type PageBlock } from 'notion-types'
 import {
   formatDate,
@@ -18,10 +20,10 @@ import {
   useNotionContext
 } from 'react-notion-x'
 import { EmbeddedTweet, TweetNotFound, TweetSkeleton } from 'react-tweet'
-import { useSearchParam } from 'react-use'
 
 import type * as types from '@/lib/types'
 import * as config from '@/lib/config'
+import { getSocialImageUrl } from '@/lib/get-social-image-url'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import { searchNotion } from '@/lib/search-notion'
@@ -29,11 +31,9 @@ import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { Footer } from './Footer'
 // import { GitHubShareButton } from './GitHubShareButton'
-import { Loading } from './Loading'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
-import { PageHead } from './PageHead'
 import styles from './styles.module.css'
 
 // -----------------------------------------------------------------------------
@@ -187,7 +187,7 @@ const propertyTextValue = (
 }
 
 const notionRendererComponents: Partial<NotionComponents> = {
-  nextLegacyImage: Image,
+  nextImage: Image,
   nextLink: Link,
   Code,
   Collection,
@@ -207,8 +207,8 @@ export function NotionPage({
   error,
   pageId
 }: types.PageProps) {
-  const router = useRouter()
-  const lite = useSearchParam('lite')
+  const searchParams = useSearchParams()
+  const lite = searchParams.get('lite')
 
   // lite mode is for oembed
   const isLiteMode = lite === 'true'
@@ -245,23 +245,11 @@ export function NotionPage({
     [block, recordMap, isBlogPost]
   )
 
-  if (router.isFallback) {
-    return <Loading />
-  }
-
   if (error || !site || !block || !recordMap) {
     return <Page404 site={site} pageId={pageId} error={error} />
   }
 
   const title = getBlockTitle(block, recordMap) || site.name
-
-  console.log('notion page', {
-    isDev: config.isDev,
-    title,
-    pageId,
-    rootNotionPageId: site.rootNotionPageId,
-    recordMap
-  })
 
   if (!config.isServer) {
     // add important objects to the window global for easy debugging
@@ -286,20 +274,35 @@ export function NotionPage({
     getPageProperty<string>('Description', block, recordMap) ||
     config.description
 
+  const blogPostingJsonLd =
+    isBlogPost && canonicalPageUrl
+      ? JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          '@id': `${canonicalPageUrl}#BlogPosting`,
+          mainEntityOfPage: canonicalPageUrl,
+          url: canonicalPageUrl,
+          headline: title,
+          name: title,
+          description: socialDescription,
+          author: {
+            '@type': 'Person',
+            name: config.author
+          },
+          image: getSocialImageUrl(pageId) || socialImage
+        })
+      : null
+
   return (
     <>
-      <PageHead
-        pageId={pageId}
-        site={site}
-        title={title}
-        description={socialDescription}
-        image={socialImage}
-        url={canonicalPageUrl}
-        isBlogPost={isBlogPost}
-      />
+      {blogPostingJsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: blogPostingJsonLd }}
+        />
+      )}
 
       {isLiteMode && <BodyClassName className='notion-lite' />}
-      {isDarkMode && <BodyClassName className='dark-mode' />}
 
       <NotionRenderer
         bodyClassName={cs(
@@ -325,8 +328,6 @@ export function NotionPage({
         pageAside={pageAside}
         footer={<Footer />}
       />
-
-      {/* <GitHubShareButton /> */}
     </>
   )
 }
