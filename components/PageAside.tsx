@@ -49,5 +49,5 @@ export function PageAside({
     )
   }
 
-  return <PageSocial />
+  return null
 }
