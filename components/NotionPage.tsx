@@ -1,10 +1,9 @@
 'use client'
 
-import cs from 'classnames'
+import { clsx as cs } from 'clsx'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { type PageBlock } from 'notion-types'
 import {
   formatDate,
@@ -13,7 +12,6 @@ import {
   getPageProperty
 } from 'notion-utils'
 import * as React from 'react'
-import BodyClassName from 'react-body-classname'
 import {
   type NotionComponents,
   NotionRenderer,
@@ -30,92 +28,22 @@ import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { Footer } from './Footer'
-// import { GitHubShareButton } from './GitHubShareButton'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
-import styles from './styles.module.css'
-
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
 // -----------------------------------------------------------------------------
 
 const Code = dynamic(() =>
-  import('react-notion-x/third-party/code').then(async (m) => {
-    // add / remove any prism syntaxes here
-    await Promise.allSettled([
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-markup-templating.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-markup.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-bash.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-c.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-cpp.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-csharp.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-docker.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-java.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-js-templates.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-coffeescript.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-diff.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-git.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-go.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-graphql.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-handlebars.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-less.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-makefile.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-markdown.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-objectivec.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-ocaml.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-python.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-reason.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-rust.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-sass.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-scss.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-solidity.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-sql.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-stylus.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-swift.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-wasm.js'),
-      // @ts-expect-error Ignore prisma types
-      import('prismjs/components/prism-yaml.js')
-    ])
-    return m.Code
-  })
+  import('@/components/CodeWithStyles').then((m) => m.Code)
 )
 
 const Collection = dynamic(() =>
   import('react-notion-x/third-party/collection').then((m) => m.Collection)
 )
 const Equation = dynamic(() =>
-  import('react-notion-x/third-party/equation').then((m) => m.Equation)
+  import('@/components/EquationWithStyles').then((m) => m.Equation)
 )
 const Pdf = dynamic(
   () => import('react-notion-x/third-party/pdf').then((m) => m.Pdf),
@@ -207,21 +135,11 @@ export function NotionPage({
   error,
   pageId
 }: types.PageProps) {
-  const searchParams = useSearchParams()
-  const lite = searchParams.get('lite')
-
-  // lite mode is for oembed
-  const isLiteMode = lite === 'true'
-
   const { isDarkMode } = useDarkMode()
 
   const siteMapPageUrl = React.useMemo(() => {
-    const params: any = {}
-    if (lite) params.lite = lite
-
-    const searchParams = new URLSearchParams(params)
-    return site ? mapPageUrl(site, recordMap!, searchParams) : undefined
-  }, [site, recordMap, lite])
+    return site ? mapPageUrl(site, recordMap!, new URLSearchParams()) : undefined
+  }, [site, recordMap])
 
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
@@ -231,7 +149,7 @@ export function NotionPage({
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
 
-  const showTableOfContents = !!isBlogPost
+  const showTableOfContents = false
   const minTableOfContentsItems = 3
 
   const pageAside = React.useMemo(
@@ -240,9 +158,10 @@ export function NotionPage({
         block={block!}
         recordMap={recordMap!}
         isBlogPost={isBlogPost}
+        minTableOfContentsItems={minTableOfContentsItems}
       />
     ),
-    [block, recordMap, isBlogPost]
+    [block, recordMap, isBlogPost, minTableOfContentsItems]
   )
 
   if (error || !site || !block || !recordMap) {
@@ -302,11 +221,9 @@ export function NotionPage({
         />
       )}
 
-      {isLiteMode && <BodyClassName className='notion-lite' />}
-
       <NotionRenderer
         bodyClassName={cs(
-          styles.notion,
+          'notion',
           pageId === site.rootNotionPageId && 'index-page'
         )}
         darkMode={isDarkMode}
@@ -314,7 +231,7 @@ export function NotionPage({
         recordMap={recordMap}
         rootPageId={site.rootNotionPageId}
         rootDomain={site.domain}
-        fullPage={!isLiteMode}
+        fullPage={true}
         previewImages={!!recordMap.preview_images}
         showCollectionViewDropdown={false}
         showTableOfContents={showTableOfContents}

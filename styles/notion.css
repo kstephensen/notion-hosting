@@ -36,6 +36,13 @@
 .notion-asset-wrapper {
   margin-top: 1em;
   margin-bottom: 1em;
+  /* Next/Image `fill` requires the containing element to be positioned. */
+  position: relative;
+}
+
+/* Some notion assets use the "-full" wrapper variant. */
+.notion-asset-wrapper-full {
+  position: relative;
 }
 
 .notion-asset-wrapper-video > div,
@@ -47,6 +54,7 @@
   max-width: 1100px;
   margin: 0 auto;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .notion-nav-header-rhs {
@@ -102,7 +110,15 @@
 }
 
 .notion-collection-card:hover .notion-collection-card-cover {
-  filter: brightness(120%);
+  filter: none;
+}
+
+.notion-collection-card:hover {
+  background: transparent !important;
+}
+
+.notion-collection-card:hover .notion-page-title-text {
+  text-decoration: underline;
 }
 
 .notion-collection-card-body {
@@ -200,6 +216,9 @@
 
 .notion-page-cover-wrapper {
   box-shadow: 2px 2px 8px 4px rgba(15, 15, 15, 0.1);
+  /* Required for Next.js <Image fill> positioning when react-notion-x
+     forces custom images without width/height. */
+  position: relative;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -347,14 +366,9 @@
   background: none !important;
 }
 
-/* if you don't want rounded page icon images, remove this */
-.notion-page-icon-hero.notion-page-icon-image {
-  border-radius: 50%;
-  box-shadow: 0 8px 40px 0 rgb(0 0 0 / 21%);
-}
-.notion-page-icon-hero.notion-page-icon-image span,
-.notion-page-icon-hero.notion-page-icon-image img {
-  border-radius: 50%;
+
+.notion-nav-header > .breadcrumb.button:hover {
+  background: transparent !important;
 }
 
 .notion-header {

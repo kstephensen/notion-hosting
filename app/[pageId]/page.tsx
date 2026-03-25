@@ -7,7 +7,7 @@ import { domain, isDev, pageUrlOverrides } from '@/lib/config'
 import { getSiteMap } from '@/lib/get-site-map'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 
-export const revalidate = 10
+export const revalidate = 3600
 
 const loadPage = cache(async (pageId: string) =>
   resolveNotionPage(domain, pageId)

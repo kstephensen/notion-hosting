@@ -5,21 +5,19 @@ import { GitHubIcon } from '@/lib/icons/github'
 import { LinkedInIcon } from '@/lib/icons/linkedin'
 import { TwitterIcon } from '@/lib/icons/twitter'
 
-import styles from './styles.module.css'
-
 export function FooterImpl() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.copyright}>
+    <footer className='w-full max-w-[1100px] mx-auto mt-auto mb-0 p-2 flex flex-row justify-between items-center max-[566px]:flex-col'>
+      <div className='text-[80%] p-[0.5em] max-[566px]:order-2 max-[566px]:mt-4'>
         Copyright {currentYear} {config.author}
       </div>
 
-      <div className={styles.social}>
+      <div className='select-none flex flex-row items-center gap-[0.25em] max-[566px]:order-1 max-[566px]:mt-4'>
         {config.twitter && (
           <a
-            className={styles.twitter}
+            className='cursor-pointer text-[2em] inline-flex p-[0.25em] transition-colors duration-250 ease-out hover:duration-50 hover:text-[#2795e9]'
             href={`https://x.com/${config.twitter}`}
             title={`X @${config.twitter}`}
             target='_blank'
@@ -31,7 +29,7 @@ export function FooterImpl() {
 
         {config.github && (
           <a
-            className={styles.github}
+            className='cursor-pointer text-[2em] inline-flex p-[0.25em] transition-colors duration-250 ease-out hover:duration-50 hover:text-[#c9510c]'
             href={`https://github.com/${config.github}`}
             title={`GitHub @${config.github}`}
             target='_blank'
@@ -43,7 +41,7 @@ export function FooterImpl() {
 
         {config.linkedin && (
           <a
-            className={styles.linkedin}
+            className='cursor-pointer text-[2em] inline-flex p-[0.25em] transition-colors duration-250 ease-out hover:duration-50 hover:text-[#0077b5]'
             href={`https://www.linkedin.com/in/${config.linkedin}`}
             title={`LinkedIn ${config.author}`}
             target='_blank'

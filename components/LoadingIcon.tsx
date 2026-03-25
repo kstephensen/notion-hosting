@@ -1,12 +1,10 @@
-import cs from 'classnames'
-
-import styles from './styles.module.css'
+import { clsx } from 'clsx'
 
 export function LoadingIcon(props: any) {
   const { className, ...rest } = props
   return (
     <svg
-      className={cs(styles.loadingIcon, className)}
+      className={clsx('animate-spin-fast block size-6 text-[rgba(55,53,47,0.4)]', className)}
       {...rest}
       viewBox='0 0 24 24'
     >
