@@ -24,7 +24,8 @@
     "deps:link:react-notion-x": "pnpm link ../react-notion-x/packages/react-notion-x",
     "test": "run-p test:*",
     "test:lint": "eslint .",
-    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
+    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check",
+    "knip": "knip"
   },
   "dependencies": {
     "@keyvhq/core": "^2.1.15",
@@ -59,8 +60,10 @@
     "@types/prismjs": "^1.26.6",
     "@types/react": "^19.2.14",
     "@types/react-body-classname": "^1.1.10",
+    "@types/react-dom": "^19.2.3",
     "@types/rss": "^0.0.32",
     "eslint": "^10.1.0",
+    "knip": "^6.0.5",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2"
@@ -81,7 +84,10 @@
     ]
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp", "simple-git-hooks"],
+    "onlyBuiltDependencies": [
+      "sharp",
+      "simple-git-hooks"
+    ],
     "minimumReleaseAge": 1440,
     "minimumReleaseAgeExclude": [
       "@fisch0920/config",
